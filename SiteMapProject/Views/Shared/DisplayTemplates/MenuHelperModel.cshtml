@@ -1,0 +1,38 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.MenuHelperModel
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+<ul id="menu" class="nav sidebar-menu">
+    @foreach (var node in Model.Nodes)
+    {
+        var nodeclass = "";
+        if (node.IsCurrentNode)
+        {
+            nodeclass = "active";
+        }
+        if (node.Children.Any(n => n.IsCurrentNode))
+        {
+            nodeclass = "active open";
+        }
+        else if (node.Children.Any())
+        {
+            foreach (var c in node.Children)
+            {
+                if (c.Children.Any())
+                {
+                    if (c.Children.Any(n => n.IsCurrentNode))
+                    {
+                        nodeclass = "active open";
+                    }
+                }
+            }
+        }
+
+        <li class="@nodeclass">
+            @Html.DisplayFor(m => node)
+            @if (node.Children.Any())
+            {
+                @Html.DisplayFor(m => node.Children)
+            }
+        </li>
+    }
+</ul>
